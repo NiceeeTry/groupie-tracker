@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- app.use(express.static('assets')) -->
+    <link rel="stylesheet" href="../assets/css/style.css">
+    <link rel="icon" type="image/png" sizes="32x32" href="../assets/img/favicon.ico">
+    <title>Groupir-Tracker</title>
+</head>
+<body>
+    <div class="title"><h1>Groupie-Tracker</h1></div>
+    <!-- <label for="Search">Choose a browser from this list:</label> -->
+    <!-- <form action="/search" autocomplete="off" method="get">
+    <input list="search" id="Search" name="Search" />
+    <datalist id="search">
+        {{range .Everyone}}
+            <option value="{{.Name}} - Artist/Band"></option>
+        {{end}}
+        {{range .Everyone}}
+            {{range .Members}}
+            <option value="{{.}} - Member"></option>
+            {{end}}
+        {{end}}
+        {{range .Location.Ind}}
+            {{range .Locations}}
+            <option value="{{.}} - Location"></option>
+            {{end}}
+        {{end}}
+        {{range .Everyone}}
+        <option value="{{.FirstAlbum}} - First Album"></option>
+        {{end}}
+        {{range .Everyone}}
+        <option value="{{.CreationDate}} - Creation Date"></option>
+        {{end}}
+       
+    </datalist>
+</form> -->
+   
+  
+    <div class="container">
+        <a href="/">
+            <div class="backHome">&#8592; Back To Home</div>
+        </a>
+        <div class="wrapper wrap">
+        {{range .Everyone}}
+           <div class="card">
+            <a href="/artists/?id={{.ID}}">
+                <div class="front">
+                    <img src="{{.Image}}" alt="">
+                </div>
+                <div class="back">
+                    <div class="text">{{.Name}}</div>
+                </div>
+            </a>
+            </div>
+        {{end}}
+    </div>
+    </div>
+ 
+
+    
+</body>
+</html>
