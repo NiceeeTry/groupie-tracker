@@ -1,7 +1,6 @@
 package server
 
 import (
-	"fmt"
 	"net/http"
 	"strconv"
 	"strings"
@@ -41,13 +40,6 @@ func MainPage(w http.ResponseWriter, r *http.Request) {
 	}
 	// fmt.Println(location.Index)
 	allInfo := Everything{artists, location}
-
-	searchTerm := r.FormValue("Search")
-	if searchTerm != "" {
-		// Search(allInfo, searchTerm)
-		fmt.Println(searchTerm)
-	}
-
 	err = tmp.ExecuteTemplate(w, "index.html", allInfo)
 	if err != nil {
 		err := "500 Internal Server Error"
@@ -101,16 +93,16 @@ func InfoAboutArtist(w http.ResponseWriter, r *http.Request) {
 }
 
 func SearchHandler(w http.ResponseWriter, r *http.Request) {
-	// if r.URL.Path != "/" {
-	// 	err := "404 Page not found"
-	// 	ErrorPage(w, err, http.StatusNotFound)
-	// 	return
-	// }
-	// if r.Method != http.MethodGet {
-	// 	err := "405 Method is not allowed"
-	// 	ErrorPage(w, err, http.StatusMethodNotAllowed)
-	// 	return
-	// }
+	if r.URL.Path != "/search/" {
+		err := "404 Page not found"
+		ErrorPage(w, err, http.StatusNotFound)
+		return
+	}
+	if r.Method != http.MethodGet {
+		err := "405 Method is not allowed"
+		ErrorPage(w, err, http.StatusMethodNotAllowed)
+		return
+	}
 
 	artists, err := GetAllArtists()
 	if err != nil {
@@ -136,7 +128,12 @@ func SearchHandler(w http.ResponseWriter, r *http.Request) {
 
 	var searchedArtists Everything
 	if searchTerm != "" {
-		searchedArtists = Search(allInfo, searchTerm)
+		searchedArtists, err = Search(allInfo, searchTerm)
+		if err != nil {
+			err := "500 Internal Server Error"
+			ErrorPage(w, err, http.StatusInternalServerError)
+			return
+		}
 		// fmt.Println(searchTerm)
 	}
 

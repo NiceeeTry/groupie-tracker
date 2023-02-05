@@ -24,7 +24,6 @@ type Artist struct {
 type Index struct {
 	ID        int      `json:"id"`
 	Locations []string `json:"locations"`
-	Dates     string   `json:"dates"`
 }
 
 type Loc struct {
@@ -139,61 +138,51 @@ func Relations(id int) (Relation, error) {
 	return rel, nil
 }
 
-func Search(data Everything, searchTerm string) Everything {
+func Search(data Everything, searchTerm string) (Everything, error) {
 	var output Everything
+	ids := make(map[int]int)
 	var artists []Artist
 	for _, result := range data.Everyone {
 		if strings.Contains(strings.ToLower(result.Name), strings.ToLower(searchTerm)) || strings.Contains(strings.ToLower(result.FirstAlbum), strings.ToLower(searchTerm)) || strings.Contains(strings.ToLower(strconv.Itoa(result.CreationDate)), strings.ToLower(searchTerm)) {
-			// fmt.Println(result)
-			artists = append(artists, result)
-		}
-		// else if len(artists) == 0 {
-		// 	for _, members := range result.Members {
-		// 		if strings.Contains(strings.ToLower(members), strings.ToLower(searchTerm)) {
-		// 			// fmt.Println("Members")
-		// 			// fmt.Println(result)
-		// 			artists = append(artists, members)
-		// 		}
-		// 	}
-		// }
-		for _, members := range result.Members {
-			if strings.Contains(strings.ToLower(members), strings.ToLower(searchTerm)) {
-				// fmt.Println("Members")
-				// fmt.Println(result)
+			if _, ok := ids[result.ID]; ok {
+				continue
+			} else {
 				artists = append(artists, result)
+				ids[result.ID] += 1
 			}
 		}
+
+		for _, members := range result.Members {
+			if strings.Contains(strings.ToLower(members), strings.ToLower(searchTerm)) {
+				if _, ok := ids[result.ID]; ok {
+					continue
+				} else {
+					artists = append(artists, result)
+					ids[result.ID] += 1
+				}
+			}
+		}
+
 	}
-	// if len(artists) == 0 {
 	for _, result := range data.Location.Ind {
 		for _, location := range result.Locations {
 			if strings.Contains(strings.ToLower(location), strings.ToLower(searchTerm)) {
-				// fmt.Println("location")
-				// fmt.Println(location)
-				art, err := OneArtist(result.ID)
-				if err != nil {
-					fmt.Println("error in getting artist")
+				if _, ok := ids[result.ID]; ok {
+					continue
+				} else {
+					art, err := OneArtist(result.ID)
+					if err != nil {
+						fmt.Println("error in getting artist")
+						return output, err
+					}
+					artists = append(artists, art)
+					ids[result.ID] += 1
 				}
-				artists = append(artists, art)
 			}
 		}
 	}
 	// fmt.Println(artists)
 	output.Everyone = artists
-	return output
+	return output, nil
 	//}
 }
-
-// previous
-// func Search(records []Artist, term string) []Artist {
-// 	var results []Artist
-// 	for _, r := range records {
-// 		if strings.Contains(strings.ToLower(r.Name), strings.ToLower(term)) {
-// 			results = append(results, r)
-// 		}
-// 	}
-// 	if len(results) == 0 {
-// 		return nil
-// 	}
-// 	return results
-// }
