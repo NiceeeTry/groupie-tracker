@@ -12,43 +12,125 @@
 </head>
 <body>
     <div class="title"><h1>Groupie-Tracker</h1></div>
-    <!-- <label for="Search">Choose a browser from this list:</label> -->
-    <div class="searchbar">
-    <form action="/search" autocomplete="off" method="get">
-        <i class="fas fa-search"></i>
-        <input list="search" id="Search" name="Search" placeholder="Search..."/>
-        <button type="submit">Search</button>
     
-    <datalist id="search">
-        {{range .Everyone}}
-            <option value="{{.Name}} - Artist/Band"></option>
-        {{end}}
-        {{range .Everyone}}
-            {{range .Members}}
-            <option value="{{.}} - Member"></option>
+    <div class="searchbar">
+        <form action="/search" autocomplete="off" method="get" class="searchBar">
+            <i class="fas fa-search"></i>
+            <input class="sb" list="search" id="Search" name="Search" placeholder="Search..."/>
+            <button type="submit">Search</button>
+    
+            <datalist id="search">
+            {{range .Everyone}}
+                <option value="{{.Name}} - Artist/Band"></option>
             {{end}}
-        {{end}}
-        {{range .Location.Ind}}
-            {{range .Locations}}
-            <option value="{{.}} - Location"></option>
+            {{range .Everyone}}
+                {{range .Members}}
+                    <option value="{{.}} - Member"></option>
+                {{end}}
             {{end}}
-        {{end}}
-        {{range .Everyone}}
-        <option value="{{.FirstAlbum}} - First Album"></option>
-        {{end}}
-        {{range .Everyone}}
-        <option value="{{.CreationDate}} - Creation Date"></option>
-        {{end}}
+            {{range .Location.Ind}}
+                {{range .Locations}}
+                    <option value="{{.}} - Location"></option>
+                {{end}}
+            {{end}}
+            {{range .Everyone}}
+                <option value="{{.FirstAlbum}} - First Album"></option>
+            {{end}}
+            {{range .Everyone}}
+                <option value="{{.CreationDate}} - Creation Date"></option>
+            {{end}}
        
-    </datalist>
-</form>
+            </datalist>
+        </form>
+
+    </div>
+  
+
+    <div class="containerNew">
+    <form action="/filter">
+        <div class="filter">
+    
+            
+
+            <div>
+                <div class="checkBoxes">
+                    <legend>№ Members in the Band</legend>
+                    <input type="checkbox" id="1" name="interest" value="1" />
+                    <label for="1">1</label>
+                    <input type="checkbox" id="2" name="interest" value="2" />
+                    <label for="2">2</label>
+                    <input type="checkbox" id="3" name="interest" value="3" />
+                    <label for="3">3</label>
+                    <input type="checkbox" id="4" name="interest" value="4" />
+                    <label for="4">4</label>
+                    <input type="checkbox" id="5" name="interest" value="5" />
+                    <label for="5">5</label>
+                    <input type="checkbox" id="6" name="interest" value="6" />
+                    <label for="6">6</label>
+                    <input type="checkbox" id="7" name="interest" value="7" />
+                    <label for="7">7</label>
+                </div>
+
+                <div class="loccc">
+                    <legend>Choose or write location</legend>
+                    <input list="locations" id="Locations" name="Locations" placeholder="Search..."/>
+                    <datalist id="locations">
+                    {{range .Location.Ind}}
+                        {{range .Locations}}
+                            <option value="{{.}}"></option>
+                        {{end}}
+                    {{end}}
+                    </datalist>
+                </div>
+            </div>
+        
+
+           
+    <!-- second -->
+            <div class="wrrr">
+                <div class="values">
+                    <p>Filter by first Album date</p>
+                    <span id="range3">
+                        1970
+                    </span>
+                    <span> &dash; </span>
+                    <span id="range4">
+                        2000
+                    </span>
+                </div>
+                <div class="cont">
+                    <div class="slider-track2"></div>
+                        <input name="range3" type="range" min="1958" max="2020" value="1970" id="slider-3" oninput="slideThree()">
+                        <input name="range4" type="range" min="1958" max="2020" value="2000" id="slider-4" oninput="slideFour()">
+                    </div>
+        <!-- Original in the bottom -->
+                    <div class="values">
+                        <p>Filter by Creation date</p>
+                        <span id="range1">
+                            1970
+                        </span>
+                        <span> &dash; </span>
+                        <span id="range2">
+                            2000
+                        </span>
+                    </div>
+                    <div class="cont">
+                        <div class="slider-track"></div>
+                        <input name="range1" type="range" min="1958" max="2015" value="1970" id="slider-1" oninput="slideOne()">
+                        <input name="range2" type="range" min="1958" max="2015" value="2000" id="slider-2" oninput="slideTwo()">
+                    </div>
+                </div>
+            </div> 
+            <div class="bottonNew">
+                <button type="submit">Search</button>
+            </div>
+            </div>
+        
+            
+    </form>
 </div>
-      <!-- <div class="search">
-        <input class="form-control" id="search" placeholder="Start typing">
-    </div> -->
-    <!-- <form action="/" autocomplete="off">
-        <input type="search" name="search" placeholder="Start typing"><br>
-    </form> -->
+
+
     <div class="container">
         <div class="wrapper wrap">
         {{range .Everyone}}
@@ -63,10 +145,10 @@
             </a>
             </div>
         {{end}}
+        </div>
     </div>
-    </div>
- 
 
-    
+
+    <script src="../assets/js/filter.js"></script>
 </body>
 </html>

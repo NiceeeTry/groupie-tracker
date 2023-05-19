@@ -14,6 +14,7 @@ func main() {
 	http.HandleFunc("/", server.MainPage)
 	http.HandleFunc("/artists/", server.InfoAboutArtist)
 	http.HandleFunc("/search/", server.SearchHandler)
+	http.HandleFunc("/filter/", server.FilterhHandler)
 	err := http.ListenAndServe(":8080", nil)
 	if err != nil {
 		log.Fatal(err)
